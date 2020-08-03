@@ -17,7 +17,7 @@ class CasbinMiddleware
 {
 
     /**
-     * 验证中间件
+     * 验证中间件 更新
      * @param ServerRequestInterface $request
      * @param string $confPath
      * @param string $table
