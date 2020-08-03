@@ -1,0 +1,11 @@
+p,cate_read,/api/v1/category,GET
+p,cate_write,/api/v1/category,POST
+p,cate_write,/api/v1/category,PUT
+p,cate_write,/api/v1/category,DELETE
+p,info_read,/api/v1/info,GET
+p,info_write,/api/v1/info,POST
+p,info_write,/api/v1/info,PUT
+p,info_write,/api/v1/info,DELETE
+g,admin,cate_read
+g,admin,cate_write
+g,admin,info_read

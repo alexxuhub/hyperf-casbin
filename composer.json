@@ -1,0 +1,20 @@
+{
+    "name": "XDApp/Casbin",
+    "description": "this is casbin for xdapp",
+    "authors": [
+        {
+            "name": "alex",
+            "email": "pangchenxu@xd.com"
+        }
+    ],
+    "license": "Apache-2.0",
+    "require": {
+        "casbin/casbin": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "XDApp\\Casbin\\": "src",
+            "XDAppTest\\Casbin\\": "tests"
+        }
+    }
+}
