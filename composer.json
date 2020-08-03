@@ -12,6 +12,7 @@
         "casbin/casbin": "^2.2"
     },
     "version":"1.0",
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "XDApp\\Casbin\\": "src",
