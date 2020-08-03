@@ -7,10 +7,11 @@
             "email": "pangchenxu@xd.com"
         }
     ],
-    "license": "Apache-2.0",
+    "license": "MIT",
     "require": {
         "casbin/casbin": "^2.2"
     },
+    "version":"1.0",
     "autoload": {
         "psr-4": {
             "XDApp\\Casbin\\": "src",
