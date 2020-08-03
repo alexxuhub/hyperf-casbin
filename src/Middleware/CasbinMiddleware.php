@@ -19,10 +19,12 @@ class CasbinMiddleware
     /**
      * 验证中间件
      * @param ServerRequestInterface $request
+     * @param string $confPath
+     * @param string $table
      * @return bool
      * @throws \Exception
      */
-    public static function filterAuth(ServerRequestInterface $request):bool {
+    public static function filterAuth(ServerRequestInterface $request,string $confPath,string $table = 'auth_rule'):bool {
          $users = Context::get('user');
          $method = $request->getMethod();
          $urlPath  = $request->getUri()->getPath();
@@ -43,8 +45,8 @@ class CasbinMiddleware
 
          $casbin = CasbinVerifyService::getInstance();
          $casbin->setPolicyMode($casbin::MODE_DATABASE)
-           ->setConfPath(BASE_DIR.'src/casbin/src/Conf/basic_rbac.conf')
-           ->setPolicyTable('auth_rule');
+           ->setConfPath($confPath)
+           ->setPolicyTable($table);
         return $casbin->verifyCasbin($subject,$object,$action);
     }
 }
