@@ -11,7 +11,7 @@
         true:会将注解自动收集到collector表中
         false:不进行处理
 ### 中间件使用
-####1.注解
+#### 1.注解
      在类内方法中使用
      /**
       * @CasbinCollector(object="cateGoryGet",desc="获取资产分类")
@@ -19,7 +19,7 @@
      COLLECTOR_OPEN为true时 
      每一次改动都会触发框架的自动收集。
      并且当object改变时，如果auth_rule配置了权限也会同步进行修改。
-####2.使用
+#### 2.使用
      CasbinMiddleware::filterAuth($request,$casbinModelPath);
      $request: Psr\Http\Message\ServerRequestInterface
      $casbinModelPath:casbin模型路径
