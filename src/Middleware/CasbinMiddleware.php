@@ -37,7 +37,7 @@ class CasbinMiddleware
          $repo = new CollectorRepository($db);
          $collect = $repo->findCollector($callBackArr[0],$callBackArr[1]);
          //不在权限收集器内，直接通过
-         if (empty($collect)) return true;
+         if (empty($collect) && env('COLLECTOR_OPEN') == 'true') return true;
          //存在，则进行判断是否拥有后续权限
          $object = $collect->object;
          $action = $collect->targetAction;
