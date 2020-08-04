@@ -25,28 +25,33 @@ class CasbinMiddleware
      * @throws \Exception
      */
     public static function filterAuth(ServerRequestInterface $request,string $confPath,string $table = 'auth_rule'):bool {
-         $users = Context::get('user');
-         $method = $request->getMethod();
-         $urlPath  = $request->getUri()->getPath();
-         $routes = ApplicationContext::getContainer()->get(DispatcherFactory::class)->getRouter('http')->getData();
-         $funcObject = $routes[0][$method][$urlPath];
-         $callBack  = $funcObject->callback;
-         //callBack App\Controller\AssetsInfoController@condition
-         $callBackArr = explode('@',$callBack);
-         $db = ApplicationContext::getContainer()->get(Db::class);
-         $repo = new CollectorRepository($db);
-         $collect = $repo->findCollector($callBackArr[0],$callBackArr[1]);
-         //不在权限收集器内，直接通过
-         if (empty($collect) && env('COLLECTOR_OPEN') == 'true') return true;
-         //存在，则进行判断是否拥有后续权限
-         $object = $collect->object;
-         $action = $collect->targetAction;
-         $subject = $users['name'];
-
-         $casbin = CasbinVerifyService::getInstance();
-         $casbin->setPolicyMode($casbin::MODE_DATABASE)
-           ->setConfPath($confPath)
-           ->setPolicyTable($table);
+        $users = Context::get('user');
+        $method = $request->getMethod();
+        $urlPath  = $request->getUri()->getPath();
+        $routes = ApplicationContext::getContainer()->get(DispatcherFactory::class)->getRouter('http')->getData();
+        $funcObject = $routes[0][$method][$urlPath];
+        $callBack  = $funcObject->callback;
+        //callBack App\Controller\AssetsInfoController@condition
+        $callBackArr = explode('@',$callBack);
+        if ( env('COLLECTOR_OPEN') != 'true'){
+            $object = $urlPath;
+            $action = $method;
+            $subject = $users['name'];
+        }else {
+            $db = ApplicationContext::getContainer()->get(Db::class);
+            $repo = new CollectorRepository($db);
+            $collect = $repo->findCollector($callBackArr[0],$callBackArr[1]);
+            //不在权限收集器内，直接通过
+            if (empty($collect)) return true;
+            //存在，则进行判断是否拥有后续权限
+            $object = $collect->object;
+            $action = $collect->targetAction;
+            $subject = $users['name'];
+        }
+        $casbin = CasbinVerifyService::getInstance();
+        $casbin->setPolicyMode($casbin::MODE_DATABASE)
+            ->setConfPath($confPath)
+            ->setPolicyTable($table);
         return $casbin->verifyCasbin($subject,$object,$action);
     }
 }

@@ -24,10 +24,15 @@
      $request: Psr\Http\Message\ServerRequestInterface
      $casbinModelPath:casbin模型路径
      中间件会自动进行匹配路由去collect收集器拿到object，加载auth_rule进行判断权限
-
+     
 ### 特别注意
      如果COLLECTOR_OPEN不为true，需要用户手动去auth_rule表正确填写
      CasbinCollector(object="",desc="")中的object
+     此时对应casbin中的
+     subject: user
+     object:  url
+     $action : method
+     
           
 
 
