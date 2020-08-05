@@ -35,29 +35,6 @@ class CasbinCollector extends AbstractAnnotation
     }
     public function collectMethod(string $className, ?string $target): void
     {
-        //效果如下:
-        //开始当前#########
-        // array
-        //     array(2) {
-        //        ["object"]=>
-        //   string(7) "addCate"
-        //        ["desc"]=>
-        //   string(18) "添加资产分类"
-        // }
-        // class
-        // string(33) "App\Controller\CateGoryController"
-        // target
-        // string(3) "add"
-        // 结束当前#########
-//        echo "开始当前#########" . PHP_EOL;
-//        echo "array" . PHP_EOL;
-//        var_dump($this->arr);
-//        echo "class" . PHP_EOL;
-//        var_dump($className);
-//        echo "target" . PHP_EOL;
-//        var_dump($target);
-//        echo "结束当前#########" . PHP_EOL;
-        //是否自动收集注解
         if (env('COLLECTOR_OPEN')=='true') {
             $this->saveCollect($className, $target);
         }

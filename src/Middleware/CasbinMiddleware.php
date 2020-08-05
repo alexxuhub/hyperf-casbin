@@ -15,7 +15,6 @@ use XDApp\Casbin\Repository\CollectorRepository;
 
 class CasbinMiddleware
 {
-
     /**
      * 验证中间件 更新
      * @param ServerRequestInterface $request
@@ -48,10 +47,98 @@ class CasbinMiddleware
             $action = $collect->targetAction;
             $subject = $users['name'];
         }
+        return self::initCasbinSrv($confPath,$table)->verifyCasbin($subject,$object,$action);
+    }
+
+    private static function initCasbinSrv(string $confPath,string $table):CasbinVerifyService{
+        if (empty($confPath)) throw new \Exception("must set casbin model conf path");
         $casbin = CasbinVerifyService::getInstance();
         $casbin->setPolicyMode($casbin::MODE_DATABASE)
             ->setConfPath($confPath)
             ->setPolicyTable($table);
-        return $casbin->verifyCasbin($subject,$object,$action);
+        return $casbin;
     }
+
+    /**
+     * 获取用户所有权限
+     * @param string $userName
+     * @param string $confPath
+     * @param string $table
+     * @return array
+     * @throws \Exception
+     */
+    public static function getPermissionForUser(string $userName,string $confPath,string $table = 'auth_rule'){
+        $casbin  = self::initCasbinSrv($confPath,$table);
+        return  $casbin->getPermissionForUser($userName);
+    }
+
+    /**
+     * 获取用户所有角色
+     * @param string $userName
+     * @param string $confPath
+     * @param string $table
+     * @return array
+     * @throws \Exception
+     */
+    public static function getRoleForUser(string $userName,string $confPath,string $table = 'auth_rule'){
+        $casbin  = self::initCasbinSrv($confPath,$table);
+        return  $casbin->getRolesForUser($userName);
+    }
+
+
+    /**
+     * 赋予用户角色
+     * @param string $userName g:v0
+     * @param string $role g:v1
+     * @param string $confPath
+     * @return bool
+     * @throws \Exception
+     */
+    public static function addRoleForUser(string $userName,string $role,string $confPath,string $table = 'auth_rule'){
+        $casbin = self::initCasbinSrv($confPath,$table);
+        return $casbin->addRoleForUser($userName,$role);
+    }
+
+    /**
+     * 赋予用户权限
+     * @param string $pName p:v0
+     * @param string $object p:v1
+     * @param string $action p:v2
+     * @param string $confPath
+     * @return bool
+     * @throws \Exception
+     */
+    public static function addPermissonForUser(string $pName,string $object,string $action,string $confPath,string $table = 'auth_rule'){
+        $casbin =  self::initCasbinSrv($confPath,$table);
+        return $casbin->addPermissionForUser($pName,$object,$action);
+    }
+
+    /**
+     * 删除用户角色
+     * @param string $userName g:v0
+     * @param string $role g:v1
+     * @return bool
+     * @throws \Exception
+     */
+
+    public static function delRoleForUser(string $userName,string $role,string $confPath,string $table = 'auth_rule'){
+        $casbin = self::initCasbinSrv($confPath,$table);
+        return $casbin->delRoleForUser($userName,$role);
+    }
+
+    /**
+     * 删除用户权限
+     * @param string $userName p:v0
+     * @param string $object p:v1
+     * @param string $action p:v2
+     * @return bool
+     * @throws \Exception
+     */
+    public static function delPermissionForUser(string $userName,string $object,string $action,string $confPath,string $table = 'auth_rule'){
+        $casbin = self::initCasbinSrv($confPath,$table);
+        return $casbin->delPermissionForUser($userName,$object,$action);
+    }
+
+
+
 }

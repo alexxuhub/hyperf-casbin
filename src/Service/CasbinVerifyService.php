@@ -144,11 +144,35 @@ class CasbinVerifyService
     }
 
 
-    public function getRolesForUser(string $userName){
+    private function initEnforce(){
         $db = ApplicationContext::getContainer()->get(Db::class);
         $repo = new RuleRepository($db,['table'=>$this->table]);
         $adapter = new DatabaseAdapter($repo);
         $enfore = new Enforcer($this->confPath,$adapter);
-        return $enfore->getPermissionsForUser($userName);
+        return $enfore;
+    }
+
+
+    public function getRolesForUser(string $userName){
+        return $this->initEnforce()->getRolesForUser($userName);
+    }
+
+    public function getPermissionForUser(string $userName){
+        return $this->initEnforce()->getPermissionsForUser($userName);
+    }
+
+    public function addRoleForUser(string $userName,string $role){
+        return $this->initEnforce()->addRoleForUser($userName,$role);
+    }
+
+    public function addPermissionForUser(string $userName,string $object,string $action){
+        return $this->initEnforce()->addPermissionForUser($userName,$object,$action);
+    }
+
+    public function delRoleForUser(string $userName,string $role){
+        return $this->initEnforce()->deleteRoleForUser($userName,$role);
+    }
+    public function delPermissionForUser(string $userName,string $object,string $action){
+        return $this->initEnforce()->deletePermissionForUser($userName,$object,$action);
     }
 }
