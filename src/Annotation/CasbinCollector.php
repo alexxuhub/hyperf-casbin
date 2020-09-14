@@ -35,9 +35,7 @@ class CasbinCollector extends AbstractAnnotation
     }
     public function collectMethod(string $className, ?string $target): void
     {
-        if (env('COLLECTOR_OPEN')=='true') {
-            $this->saveCollect($className, $target);
-        }
+        $this->saveCollect($className, $target);
     }
 
     public function saveCollect(string $key,string $target){
