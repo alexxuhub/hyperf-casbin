@@ -103,6 +103,7 @@ class CasbinMiddleware
      * 赋予用户权限
      * @param string $pName p:v0
      * @param string $object p:v1
+     *
      * @param string $action p:v2
      * @param string $confPath
      * @return bool
