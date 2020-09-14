@@ -23,7 +23,7 @@ class CasbinMiddleware
      * @return bool
      * @throws \Exception
      */
-    public static function filterAuth(ServerRequestInterface $request,string $confPath,string $table = 'auth_rule'):bool {
+    public static function filterAuth(ServerRequestInterface $request,string $confPath,bool $collect_open = false,string $table = 'auth_rule'):bool {
         $users = Context::get('user');
         $method = $request->getMethod();
         $urlPath  = $request->getUri()->getPath();
@@ -32,7 +32,7 @@ class CasbinMiddleware
         $callBack  = $funcObject->callback;
         //callBack App\Controller\AssetsInfoController@condition
         $callBackArr = explode('@',$callBack);
-        if ( env('COLLECTOR_OPEN') != 'true'){
+        if ( $collect_open ){
             $object = $urlPath;
             $action = $method;
             $subject = $users['name'];
